@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:bp_computers/main.dart';
 import 'package:bp_computers/models/computerList.dart';
 import 'package:flutter/foundation.dart';
@@ -6,7 +5,6 @@ import 'package:hive/hive.dart';
 import 'package:indexed/indexed.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -169,8 +167,8 @@ class _ScanScreenState extends State<ScanScreen> {
       final foundComp = computers.where((computer) {
       final code =
             result!.code?.replaceAll(RegExp(r'[^0-9]'), '').toLowerCase();
-        print("${computer.uuid.toLowerCase()} ---- ${code!}");
-        return computer.uuid.toLowerCase() == code;
+        print("${computer.uuid.toString().toLowerCase()} ---- ${code!}");
+        return computer.uuid.toString().toLowerCase() == code;
       });
 
       print("found item ---$foundComp -- ${foundComp.first.responsible}");

@@ -177,7 +177,6 @@ class _ComputerDetailsScreenState extends State<ComputerDetailsScreen> {
 
   void initComputer(Computer comp) {
     computers.clear();
-    var deviceTypes = ['Şahsy kompýuter',"Monoblok","Noutbuk","Serwer enjamy"];
 
     computers.add(ComputerDetail(
         name: 'Enjamyň ady',
@@ -186,7 +185,7 @@ class _ComputerDetailsScreenState extends State<ComputerDetailsScreen> {
         icon: const Icon(Icons.desktop_mac)));
     computers.add(ComputerDetail(
         name: 'Enjamyň görnüşi',
-        title: deviceTypes[int.parse(comp.deviceType)-1],
+        title: comp.deviceType,
         color: const Color(0xff647E68),
         icon: const Icon(Icons.devices_other)));
     computers.add(ComputerDetail(

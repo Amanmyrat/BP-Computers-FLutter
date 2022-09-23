@@ -1,96 +1,99 @@
+import 'dart:convert';
 import 'dart:core';
 import 'package:hive/hive.dart';
+part 'computer.g.dart';
 
- part 'computer.g.dart';
+List<Computer> computerModelFromJson(String str) =>
+    List<Computer>.from(json.decode(str).map((x) => Computer.fromJson(x)));
 
- @HiveType(typeId:0)
+String computerModelToJson(List<Computer> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+@HiveType(typeId:0)
 class Computer {
   @HiveField(0)
-  late String office;
+  final String office;
   @HiveField(1)
-  late String uuid;
+  final String uuid;
   @HiveField(2)
-  late String deviceName;
+  final String deviceName;
   @HiveField(3)
-  late String deviceType;
+  final String deviceType;
   @HiveField(4)
-  late String responsible;
+  final String responsible;
   @HiveField(5)
-  late String job;
+  final String job;
   @HiveField(6)
-  late String manager;
+  final String manager;
   @HiveField(7)
-  late String phone;
+  final String phone;
   @HiveField(8)
-  late String privatePhone;
+  final String privatePhone;
   @HiveField(9)
-  late String room;
+  final String room;
   @HiveField(10)
-  late String domainName;
+  final String domainName;
   @HiveField(11)
-  late String ipAddress;
+  final String ipAddress;
   @HiveField(12)
-  late String macAddress;
+  final String macAddress;
   @HiveField(13)
-  late String operatingSystem;
+  final String operatingSystem;
   @HiveField(14)
-  late String cpu;
+  final String cpu;
   @HiveField(15)
-  late String drive;
+  final String drive;
   @HiveField(16)
-  late String ram;
+  final String ram;
   @HiveField(17)
-  late String network;
+  final String network;
   @HiveField(18)
-  late String internet;
+  final String internet;
 
   Computer({required this.office, required this.uuid, required this.deviceName, required this.deviceType, required this.responsible, required this.job, required this.manager, required this.phone, required this.privatePhone, required this.room, required this.domainName, required this.ipAddress, required this.macAddress, required this.operatingSystem, required this.cpu, required this.drive, required this.ram, required this.network, required this.internet});
 
-  static Computer fromJson(Map<String, dynamic> json) => Computer(
-    office : json ['Prokuratura'],
-    uuid : json ['Uuid'],
-    deviceName : json ['Device Name'],
-    deviceType : json ['Device Type'],
-    responsible : json ['Responsible Person'],
-    job : json ['Job Title'],
-    manager : json ['Department Manager'],
-    phone : "+993 ${json ['Phone Prefix']} ${json ['Phone']}",
-    privatePhone : "+993 ${json ['Private Phone']}",
-    room : json ['Room'],
-    domainName : json ['Domain Name'],
-    ipAddress : json ['Ip Prefix'] + "." + json ['Ip Suffix'],
-    macAddress : json ['Mac Prefix'] + ":" + json ['Mac Suffix'],
-    operatingSystem : json ['Operating System'],
-    cpu : json ['Cpu'],
-    drive : json ['Drive'],
-    ram : json ['Ram'],
-    network : json ['Network'],
-    internet : json ['Internet'],
+  factory Computer.fromJson(Map<String, dynamic> json) => Computer(
+      office : json ['district'],
+      uuid : json ['uuid'],
+      deviceName : json ['device_name'],
+      deviceType : json ['device_type'],
+      responsible : json ['responsible'],
+      job : json ['job'],
+      manager : json ['department_manager'],
+      phone : json ['phone'],
+      privatePhone : json ['private_phone'],
+      room : json ['room'],
+      domainName : json ['domain_name'],
+      ipAddress : json ['ip_address'],
+      macAddress : json ['mac_address'],
+      operatingSystem : json ['operating_system'],
+      cpu : json ['cpu'],
+      drive : json ['drive'],
+      ram : json ['ram'],
+      network : json ['network'],
+      internet : json ['internet'],
   );
 
-  // Map<String, dynamic> toJson() {
-  //   final Map<String, dynamic> data = <String, dynamic>{};
-  //   data['uuid'] = uuid;
-  //   data['deviceName'] = deviceName;
-  //   data['deviceType'] = deviceType;
-  //   data['responsible'] = responsible;
-  //   data['job'] = job;
-  //   data['manager'] = manager;
-  //   data['phone'] = phone;
-  //   data['privatePhone'] = privatePhone;
-  //   data['room'] = room;
-  //   data['domainName'] = domainName;
-  //   data['ipAddress'] = ipAddress;
-  //   data['macAddress'] = macAddress;
-  //   data['operatingSystem'] = operatingSystem;
-  //   data['cpu'] = cpu;
-  //   data['drive'] = drive;
-  //   data['ram'] = ram;
-  //   data['network'] = network;
-  //   data['internet'] = internet;
-  //   return data;
-  // }
-
-
+  Map<String, dynamic> toJson() => {
+    "office" :office,
+    "uuid" : uuid,
+    "deviceName" : deviceName,
+    "deviceType" : deviceType,
+    "responsible" : responsible,
+    "job" : job,
+    "manager" : manager,
+    "phone" :phone,
+    "privatePhone" : privatePhone,
+    "room" : room,
+    "domainName" : domainName,
+    "ipAddress" : ipAddress,
+    "macAddress" : macAddress,
+    "operatingSystem" : operatingSystem,
+    "cpu" : cpu,
+    "drive" : drive,
+    "ram" : ram,
+    "network" : network,
+    "internet" : internet,
+  };
 
 }

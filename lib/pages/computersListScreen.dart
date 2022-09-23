@@ -2,29 +2,11 @@ import 'dart:ui';
 
 import 'package:bp_computers/models/computer.dart';
 import 'package:bp_computers/models/computerList.dart';
+import 'package:bp_computers/services/api_servoce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:gsheets/gsheets.dart';
-import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
-const _credentials = r''' 
-  {
-    "type": "service_account",
-    "project_id": "bp-computers-361913",
-    "private_key_id": "470d71f554816fa30259f6d58c8a55f7e24ee47d",
-    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDSk5uPlANyVdmM\ndxTz+nGAFSFCJFUWJZjm2J0RJbR3mf82M9c3xD9HhZSl5smSW5prALYqCS/jJkVF\ny7YVtt6txRXd3/6+tgaWWrqpptGMNq4kEBmDphm8Kibiwv/S+6dN3uvaak/yf+dD\nHJWzgjYvffkJE7rnyq5I9QOETwn3gsXHd5f2tkvwfzAvX+wCLra/TNeVeD4FnhuE\nsVStLAdUZQRiB5iSgqQUFNppu2vZslEpSYPvZycAPlA+dtW9aXT2av6AHGa63JWg\ngRugbU9xGMaNxHuTBwPvKSpFVILsDuLPqSI+awquqe4MDEVslf3w0NrCObRARMOC\nEvyrt2WlAgMBAAECggEAFlrFMOuC/NL6/VvG8FUDUkLr/PGOdtjBmqrJlysW4CY2\nXwgHLkxkdgX1pIcTmbilHqbnWnRkjmC0X0HOWrpxzqYVjtsGAt5KuhDNBXry0/Jv\nb4n7VhZ+tOhkqGi7Gn13YrTqT42UXydk4vhYjBikAqFaRrRpgHdBI/hJdJ+kweRW\noug9AuZM7H539w2PyGm34dXwoBydGEPE6T+NV/UJA+MNJ6yC5NGBBBzJ8rVttNT8\nE3GY1PRv56wx5nENA/niN+zUNvr/NSETq4T/VwHGOK2m3W1jkzmprb8LKkk3nddf\nZtUgjJtk6HsHE2RvMU6UClEY4RkiJUoFz6dlnZIQIQKBgQD9mvNyXWcz1VGO58Ee\nLQy6M7oXW4K2E89Sqziy3Mmhl5j/WUUSsSsd4BC0niu9cmV3eMQnXcf/HS9ffFBm\nVTLXKl4nnlRbnbN2f/DAh5V1Dqzf0MAB30Esm0kqbKv2XC0yOcTFHeQ7icszzNy1\n+plgpfONyH/4a32auGuwHAARHwKBgQDUkKRVdwpqU92xXWVyEKMzwVN4RtEIy5tG\nwGJP5njt/q7v75RPqwRMZiOeNY5K0yKf4UZoARctIebZTvHQEYOcQjlVH25UHKjY\nzQmgncHgrBEOqKXZWTW3Q3ZJ4SHB+ZiXoWbjfX/JaJOVHeQ0quGhYXCP6XYbQ4CX\n/wlTP0ScuwKBgQDChv7B9L9a1P/wW/iYCvo+Qbs2e20x+NQIl2mwWQcYuk4TYAhJ\npDhsfBiUUtc+Q+ds0uezQo5MM7jIx3RsamHLBaafQSV3+OlVtiGXrOiJl64nJ9qA\nFR3K93oR3rWxDVdltUYn5RvSR4nku/l4ZTcNGX5OfUMb7Ge2LEv+FBxBBQKBgQCN\nkB7BhFv9YAke3DJ5ercV+sSaL597Gg45WlqfF8Clz5210XqWbDCaqNNDxCsVjfNb\nQu5eyYsj1ZYmVzsX9PIPmNMR67LQdZ3FdRfaTfYWqMFbX9nEHHN3r4gRv8t5ob6M\nDUO2cZgvDGRtRND8eml1zqzmSvcLRTNZBtKxDEunjQKBgEsvE5bEgy9hzmOtn/SM\n3v1vhSQ3GoWvtAwhdnCA+pZlX4qYtHUUOO1mAedW9z34M37k9h9x7hxcolKa6/RY\nz1+wdSbu0jBXaXCkPK48LvWBOstVNkiQJxiHdHuBfKSUofkAd9viseXp1cUpCBK2\nvjKSlkqotth5egXmgto7GAG0\n-----END PRIVATE KEY-----\n",
-    "client_email": "bp-computers@bp-computers-361913.iam.gserviceaccount.com",
-    "client_id": "105000480841019104100",
-    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-    "token_uri": "https://oauth2.googleapis.com/token",
-    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/bp-computers%40bp-computers-361913.iam.gserviceaccount.com"
-  }
-  ''';
-const _spreadsheetId = '1VROpjZ27C3veVhqbF3LxwBVp78B4k64S8aPXKd5tsmw';
 
 late Box box;
 
@@ -45,32 +27,28 @@ class _ComputersListScreenState extends State<ComputersListScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       initHive();
-
-      // var comps = await getComputersData();
-      // setState(() {
-      //   computers = comps;
-      // });
     });
   }
 
   Widget listTemplate(index) {
     var deviceType = computers[index].deviceType;
-    if (deviceType is int) {
-      print("Integer");
-    }
+
     var qrCodeColor = const Color(0xff0064E0);
     switch (deviceType) {
-      case "1":
+      case "Şahsy kompýuter":
         qrCodeColor = const Color(0xff0064E0);
         break;
-      case "2":
+      case "Noutbuk":
         qrCodeColor = const Color(0xff535353);
         break;
-      case "3":
+      case "Monoblok":
         qrCodeColor = const Color(0xffda9c1b);
         break;
-      case "4":
+      case "Serwer enjamy":
         qrCodeColor = const Color(0xff006100);
+        break;
+      default:
+        qrCodeColor = Colors.red;
         break;
     }
 
@@ -126,7 +104,7 @@ class _ComputersListScreenState extends State<ComputersListScreen> {
                         ),
                       ),
                       Expanded(
-                        flex: 3,
+                        flex: 4,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -136,15 +114,19 @@ class _ComputersListScreenState extends State<ComputersListScreen> {
                               color: Color(0xff04485F),
                               // color: qrCodeColor,
                             ),
-                            Text(
-                              computers[index].office,
-                              style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: "Montserrat",
-                                  color: Color(0xff04485F)),
-                              textAlign: TextAlign.center,
-                            ),
+                            SizedBox(
+                              width: 190,
+                              child: Text(
+                                maxLines: 2,
+                                computers[index].office,
+                                style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: "Montserrat",
+                                    color: Color(0xff04485F)),
+                                // textAlign: TextAlign.center,
+                              ),
+                            )
                           ],
                         ),
                       ),
@@ -215,8 +197,6 @@ class _ComputersListScreenState extends State<ComputersListScreen> {
                             ),
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(8))),
-
-                        // height: 50,
                         child: Row(
                           children: [
                             Expanded(
@@ -228,17 +208,17 @@ class _ComputersListScreenState extends State<ComputersListScreen> {
                                 onChanged: searchComputer,
                               ),
                             ),
-                            InkWell(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                      context, '/scan');
-                                },
-                                child: const Expanded(
+                            Expanded(
                                     flex: 1,
-                                    child: Icon(
+                                    child: InkWell(
+                                        onTap: () {
+                                          Navigator.pushNamed(context, '/scan');
+                                        },
+                                        child: const Icon(
                                       Icons.qr_code_2_outlined,
                                       color: Color(0xff04485F),
-                                    ))),
+                                    )
+                            )),
                             isLoading
                                 ? const SizedBox(width: 10)
                                 : const SizedBox(width: 0),
@@ -293,9 +273,8 @@ class _ComputersListScreenState extends State<ComputersListScreen> {
     setState(() {
       isLoading = !isLoading;
     });
-    List<Computer> comps = await getComputersData();
+    List<Computer> comps = await getComputersData(context);
     if (comps.isNotEmpty) {
-      // Hive.box('offline_computers').clear();
       box.put("offline_computers",
           ComputerList(name: "offline computers list", computerList: comps));
       setState(() {
@@ -303,6 +282,12 @@ class _ComputersListScreenState extends State<ComputersListScreen> {
         untouchableComputers = comps;
         isLoading = !isLoading;
       });
+      showToast(context, "Üstünlikli täzelendi");
+    } else{
+      setState(() {
+        isLoading = !isLoading;
+      });
+      showToast(context, "Täzeden synanyşyp görüň");
     }
   }
 
@@ -317,7 +302,6 @@ class _ComputersListScreenState extends State<ComputersListScreen> {
       computers = comps.computerList;
       untouchableComputers = comps.computerList;
     });
-    print(comps.computerList);
   }
 
   void searchComputer(String query) {
@@ -330,7 +314,10 @@ class _ComputersListScreenState extends State<ComputersListScreen> {
     final filteredComps = untouchableComputers.where((computer) {
       final input = query.toLowerCase();
       return computer.responsible.toLowerCase().contains(input) ||
-          computer.uuid.toLowerCase().contains(input) ||
+          computer.uuid.toString().toLowerCase().contains(input) ||
+          computer.deviceName.toString().toLowerCase().contains(input) ||
+          computer.deviceType.toString().toLowerCase().contains(input) ||
+          computer.phone.toString().toLowerCase().contains(input) ||
           computer.office.toLowerCase().contains(input) ||
           computer.job.toLowerCase().contains(input) ||
           computer.domainName.toLowerCase().contains(input) ||
@@ -344,49 +331,24 @@ class _ComputersListScreenState extends State<ComputersListScreen> {
   }
 }
 
-// void getComputersData() async {
-Future<List<Computer>> getComputersData() async {
-  final gsheets = GSheets(_credentials);
-  final ss = await gsheets.spreadsheet(_spreadsheetId);
-  var sheet = ss.worksheetByTitle("Computers");
-
-  if (sheet == null) return <Computer>[];
-
+Future<List<Computer>> getComputersData(context) async {
+  List<Computer> computers;
   print(
-      " ------------------------------ LOADING ------------------------------");
-  final computers = await sheet.values.map.allRows();
-  print(
-      " ------------------------------ LOADED ------------------------------");
-  // print(computers);
-  return computers == null
-      ? <Computer>[]
-      : computers.map(Computer.fromJson).toList();
+      " ------------------------------ LOADING COMPUTERS------------------------------");
+  try {
+    computers = (await ApiService().fetchComputers());
+    return computers;
+  }catch (e) {
+    return <Computer>[];
+  }
 
-  // List<Computer> list = [];
-  // computers!.forEach((computer) => list.add(
-  //     Computer(
-  //         office: computer["Prokuratura"] ?? "-",
-  //         uuid: computer["Uuid"] ?? "-",
-  //         deviceName: computer["Device Name"] ?? "-",
-  //         deviceType: computer["Device Type"] ?? "-",
-  //         responsible: computer["Responsible Person"] ?? "-",
-  //         job: computer["Job Title"] ?? "-",
-  //         manager: computer["Department Manager"] ?? "-",
-  //         phone: computer["Phone"] != null ? ("993 ${computer["Phone Prefix"] ?? "-"} ${computer["Phone"] ?? "-"}") : "-",
-  //         privatePhone: computer["Private Phone"] != null ? ("993 ${computer["Private Phone"] ?? "-"}") : "-",
-  //         room: computer["Room"] ?? "-",
-  //         domainName: computer["Domain Name"] ?? "-",
-  //         ipAddress: computer["Ip Suffix"] != null ? ("${computer["Ip Prefix"] ?? "-"}: ${computer["Ip Suffix"] ?? "-"}") : "-",
-  //         macAddress: computer["Mac Suffix"] != null ? ("${computer["Mac Prefix"] ?? "-"}: ${computer["Mac Suffix"] ?? "-"}") : "-",
-  //         operatingSystem: computer["Operating System"] ?? "-",
-  //         cpu: computer["Cpu"] ?? "-",
-  //         drive: computer["Drive"] ?? "-",
-  //         ram: computer["Ram"] ?? "-",
-  //         network: computer["Network"] ?? "-",
-  //         internet: computer["Internet"] ?? "-",
-  //     )
-  // ));
-
-  // print("Inserted");
-  // await sheet!.values.insertValue("Aman", column: 1, row: 1);
+}
+void showToast(BuildContext context, String text) {
+  final scaffold = ScaffoldMessenger.of(context);
+  scaffold.showSnackBar(
+    SnackBar(
+      content: Text(text),
+      action: SnackBarAction(label: 'Bolýar', onPressed: scaffold.hideCurrentSnackBar),
+    ),
+  );
 }
