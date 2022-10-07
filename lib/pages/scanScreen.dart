@@ -40,103 +40,91 @@ class _ScanScreenState extends State<ScanScreen> {
       statusBarColor: Colors.transparent,
     ));
 
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const Home()
-            ),
-            ModalRoute.withName("/")
-        );
-        return false;
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: const Color(0xfff3f3f3),
-        body: Scaffold(
-            body: Indexer(
-              children: [
-                Indexed(
-                  index: 2,
-                  child: Stack(
-                    children: <Widget>[
-                      Positioned.fill(
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Lottie.asset(
-                            'assets/animation/qr-scanning.json',
-                            frameRate: FrameRate.max,
-                            // width: 50,
-                            height: 250,
-                            // fit: BoxFit.fill,
-                          ),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: const Color(0xfff3f3f3),
+      body: Scaffold(
+          body: Indexer(
+            children: [
+              Indexed(
+                index: 2,
+                child: Stack(
+                  children: <Widget>[
+                    Positioned.fill(
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Lottie.asset(
+                          'assets/animation/qr-scanning.json',
+                          frameRate: FrameRate.max,
+                          // width: 50,
+                          height: 250,
+                          // fit: BoxFit.fill,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                tryAgain
-                    ? Indexed(
-                  index: 2,
-                  child: Stack(
-                    children: <Widget>[
-                      Align(
-                        alignment: Alignment.center,
-                        child: Container(
-                          height: 50,
-                          width: 230,
-                          margin: const EdgeInsets.only(top: 350),
-                          child: ElevatedButton.icon(
-                            onPressed: () {
-                              print("----------------------------------RESTART---------------------");
-                              Navigator.pushNamed(context, '/scan');
-                            },
-                            icon: const Icon(
-                              Icons.refresh_outlined,
-                              size: 24.0,
-                            ),
-                            style: ButtonStyle(
-                                backgroundColor:
-                                MaterialStateProperty.all<Color>(
-                                    const Color(0xff04485F)),
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ))),
-                            label: const Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 4),
-                                //apply padding to some sides only
-                                child: Text(
-                                  'Täzeden skan etmek',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: "Montserrat"),
-                                ),
+              ),
+              tryAgain
+                  ? Indexed(
+                index: 2,
+                child: Stack(
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        height: 50,
+                        width: 230,
+                        margin: const EdgeInsets.only(top: 350),
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            print("----------------------------------RESTART---------------------");
+                            Navigator.pushNamed(context, '/scan');
+                          },
+                          icon: const Icon(
+                            Icons.refresh_outlined,
+                            size: 24.0,
+                          ),
+                          style: ButtonStyle(
+                              backgroundColor:
+                              MaterialStateProperty.all<Color>(
+                                  const Color(0xff04485F)),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ))),
+                          label: const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 4),
+                              //apply padding to some sides only
+                              child: Text(
+                                'Täzeden skan etmek',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: "Montserrat"),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                )
-                    : Container(),
-                Indexed(
-                  index: 1,
-                  child: QRView(
-                    key: qrKey,
-                    onQRViewCreated: _onQRViewCreated,
-                    onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            )),
-      ),
+              )
+                  : Container(),
+              Indexed(
+                index: 1,
+                child: QRView(
+                  key: qrKey,
+                  onQRViewCreated: _onQRViewCreated,
+                  onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
+                ),
+              ),
+            ],
+          )),
     );
   }
 
