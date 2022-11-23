@@ -46,7 +46,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   bool positive = false;
   late final prefs;
-  String theme = "Light";
+  String theme = "";
 
   @override
   void initState() {
@@ -104,7 +104,7 @@ class _HomeState extends State<Home> {
                             ),
                           ],
                           onChanged: (b) async {
-                            changeTheme(context, b ? "dark" : "light", b);
+                            changeTheme(context, b ? "light" : "dark", b);
                           },
                           colorBuilder: (b) => b ? Colors.white : Colors.white,
                           // colorBuilder: (b) => b
@@ -282,7 +282,9 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                           Text(
-                            "Türkmenistanyň Baş Prokuraturasy".toUpperCase(),
+                            "Türkmenistanyň Baş Prokuraturasy \n".toUpperCase(),
+                            // + " " + theme + " " + positive.toString(),
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w700,
@@ -307,8 +309,8 @@ class _HomeState extends State<Home> {
 
   Future<void> changeTheme(BuildContext context, String newTheme, bool b) async{
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('themeMode', theme);
-    context.read<ThemeProvider>().changeTheme(theme);
+    await prefs.setString('themeMode', newTheme);
+    context.read<ThemeProvider>().changeTheme(newTheme);
 
     setState(() => {
       theme = newTheme,
@@ -317,11 +319,19 @@ class _HomeState extends State<Home> {
   }
 
   verifyTheme() {
-    String? theme = prefs.getString('themeMode');
-    if (theme == null) {
+    String? newTheme = prefs.getString('themeMode');
+    if (newTheme == null) {
       context.read<ThemeProvider>().changeTheme("light");
+      setState(() => {
+        theme = "light",
+        positive = false,
+      });
     } else {
-      context.read<ThemeProvider>().changeTheme(theme);
+      context.read<ThemeProvider>().changeTheme(newTheme);
+      setState(() => {
+        theme = newTheme,
+        positive = newTheme == "light" ? false : true,
+      });
     }
   }
 }
